@@ -29,6 +29,7 @@ h1 {
 	display: flex;
 	flex-direction: column;
 	width: 60vw;
+	margin-bottom: 3rem;
 }
 .main textarea {
 	resize: vertical;
@@ -54,6 +55,16 @@ h1 {
 	background-color: #086b52;
 }
 .main .result {
-	font-weight: bold;
-	margin-top: 40px;
+	box-sizing: border-box;
+	width: 80vw;
+	max-height: 40vh;
+}
+.main .result p {
+	font-size: calc(0.7rem + 1vmin);
+	padding: 0 1rem;
+	max-height: 40vh;
+	margin: 0;
+	overflow-y: auto;
+	text-align: left;
+	white-space: pre-line;
 }

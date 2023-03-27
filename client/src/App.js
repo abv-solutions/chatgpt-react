@@ -17,7 +17,7 @@ const App = () => {
 				//body: JSON.stringify({ prompt }),
 			});
 			const data = await response.json();
-			console.log(data);
+			setResult(data[0].message);
 		} catch (error) {
 			console.log(error);
 		}
@@ -31,14 +31,16 @@ const App = () => {
 					<form onSubmit={onSubmit}>
 						<textarea
 							name='prompt'
-							rows='5'
+							rows='3'
 							placeholder='Enter a prompt'
 							value={prompt}
 							onChange={(e) => setPrompt(e.target.value)}
 						/>
-						<input type='submit' value='Submit' />
+						<input type='submit' value='Ask me' />
 					</form>
-					<div>{result}</div>
+					<div className='result'>
+						<p>{result}</p>
+					</div>
 				</main>
 			</div>
 		</div>
