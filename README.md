@@ -1,2 +1,3 @@
-# chatgpt
+# chatgpt-react
+
 ChatGPT integration website
