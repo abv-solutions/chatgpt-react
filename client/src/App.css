@@ -2,7 +2,7 @@
 	text-align: center;
 }
 
-.App-header {
+.App-content {
 	background-color: #282c34;
 	min-height: 100vh;
 	display: flex;
@@ -11,4 +11,49 @@
 	justify-content: center;
 	font-size: calc(10px + 2vmin);
 	color: white;
+}
+h1 {
+	padding: 0 1rem;
+}
+.main input {
+	color: #353740;
+	font-family: 'ColfaxAI', Helvetica, sans-serif;
+}
+.main {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding-bottom: 5rem;
+}
+.main form {
+	display: flex;
+	flex-direction: column;
+	width: 60vw;
+}
+.main textarea {
+	resize: vertical;
+	font: inherit;
+	border: none;
+	outline: none;
+	border-radius: 5px;
+	padding: 0.7rem 1rem;
+	margin-bottom: 1rem;
+}
+.main input[type='submit'] {
+	font: inherit;
+	padding: 0.7rem 0;
+	color: #fff;
+	background-color: #109977;
+	border: none;
+	border-radius: 5px;
+	text-align: center;
+	cursor: pointer;
+	transition: all 0.5s;
+}
+.main input[type='submit']:hover {
+	background-color: #086b52;
+}
+.main .result {
+	font-weight: bold;
+	margin-top: 40px;
 }
