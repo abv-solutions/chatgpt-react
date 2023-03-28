@@ -28,11 +28,11 @@ h1 {
 .main form {
 	display: flex;
 	flex-direction: column;
-	width: 60vw;
+	width: 70vw;
 	margin-bottom: 3rem;
 }
 .main textarea {
-	resize: vertical;
+	resize: none;
 	font: inherit;
 	border: none;
 	outline: none;
