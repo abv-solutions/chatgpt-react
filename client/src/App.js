@@ -3,13 +3,14 @@ import { useState } from 'react';
 
 const App = () => {
 	const [prompt, setPrompt] = useState('test');
-	const [result, setResult] = useState();
+	const [results, setResults] = useState([]);
+	const [index, setIndex] = useState(0);
 
 	// Call click function
 	const onSubmit = async (event) => {
 		event.preventDefault();
 		try {
-			const response = await fetch('/chat', {
+			const response = await fetch(`/chat/${index}`, {
 				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json',
@@ -17,7 +18,8 @@ const App = () => {
 				//body: JSON.stringify({ prompt }),
 			});
 			const data = await response.json();
-			setResult(data[0].message);
+			data && setResults((prev) => [...prev, data]);
+			data && setIndex(index + 1);
 		} catch (error) {
 			console.log(error);
 		}
@@ -39,7 +41,11 @@ const App = () => {
 						<input type='submit' value='Ask me' />
 					</form>
 					<div className='result'>
-						<p>{result}</p>
+						<div>
+							{results.map(({ _id, message }) => (
+								<p key={_id}>{message}</p>
+							))}
+						</div>
 					</div>
 				</main>
 			</div>

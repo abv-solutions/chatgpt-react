@@ -3,8 +3,10 @@ const Chat = require('../models/Chat');
 // Get chat
 exports.getChat = async (req, res) => {
 	try {
-		const items = await Chat.find();
-		res.status(200).json(items);
+		const messages = await Chat.find();
+		res
+			.status(200)
+			.json(messages[req.params.index] ? messages[req.params.index] : null);
 	} catch (err) {
 		res.status(500).json({ msg: 'Something went wrong' });
 	}

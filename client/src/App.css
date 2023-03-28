@@ -59,7 +59,7 @@ h1 {
 	width: 80vw;
 	max-height: 40vh;
 }
-.main .result p {
+.main .result div {
 	font-size: calc(0.7rem + 1vmin);
 	padding: 0 1rem;
 	max-height: 40vh;
