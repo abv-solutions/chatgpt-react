@@ -68,3 +68,7 @@ h1 {
 	text-align: left;
 	white-space: pre-line;
 }
+.main .result p {
+	padding: 1rem;
+	margin: 0;
+}

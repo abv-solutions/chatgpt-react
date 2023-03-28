@@ -2,15 +2,14 @@ import './App.css';
 import { useState } from 'react';
 
 const App = () => {
-	const [prompt, setPrompt] = useState('test');
+	const [prompt, setPrompt] = useState('');
 	const [results, setResults] = useState([]);
-	const [index, setIndex] = useState(0);
 
 	// Call click function
 	const onSubmit = async (event) => {
 		event.preventDefault();
 		try {
-			const response = await fetch(`/chat/${index}`, {
+			const response = await fetch(`/chat/${prompt || 0}`, {
 				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json',
@@ -18,8 +17,11 @@ const App = () => {
 				//body: JSON.stringify({ prompt }),
 			});
 			const data = await response.json();
-			data && setResults((prev) => [...prev, data]);
-			data && setIndex(index + 1);
+			const myMessage = {
+				_id: 'dummyId',
+				message: prompt || 0,
+			};
+			data && setResults((prev) => [...prev, myMessage, data]);
 		} catch (error) {
 			console.log(error);
 		}
@@ -42,8 +44,15 @@ const App = () => {
 					</form>
 					<div className='result'>
 						<div>
-							{results.map(({ _id, message }) => (
-								<p key={_id}>{message}</p>
+							{results.map(({ _id, message }, idx) => (
+								<p
+									key={Math.random().toString(36).substring(2, 5)}
+									style={{
+										backgroundColor: idx % 2 === 0 ? '#343949' : '#1c1f26',
+									}}
+								>
+									{message}
+								</p>
 							))}
 						</div>
 					</div>
