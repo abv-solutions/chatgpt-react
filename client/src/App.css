@@ -14,6 +14,7 @@
 }
 h1 {
 	padding: 0 1rem;
+	margin-top: -2rem;
 }
 .main input {
 	color: #353740;
@@ -23,13 +24,12 @@ h1 {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	padding-bottom: 5rem;
 }
 .main form {
 	display: flex;
 	flex-direction: column;
 	width: 70vw;
-	margin-bottom: 3rem;
+	margin-top: 2rem;
 }
 .main textarea {
 	resize: none;
@@ -55,20 +55,18 @@ h1 {
 	background-color: #086b52;
 }
 .main .result {
-	box-sizing: border-box;
 	width: 80vw;
-	max-height: 40vh;
+	max-height: 35vh;
 }
-.main .result div {
+.main .result .message {
 	font-size: calc(0.7rem + 1vmin);
-	padding: 0 1rem;
-	max-height: 40vh;
-	margin: 0;
+	max-height: 35vh;
+	margin-left: 20px;
 	overflow-y: auto;
 	text-align: left;
 	white-space: pre-line;
 }
-.main .result p {
+.main .result .message p {
 	padding: 1rem;
 	margin: 0;
 }
