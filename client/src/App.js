@@ -9,30 +9,63 @@ const App = () => {
 
 	useEffect(() => {
 		const message = document.querySelector('.message');
+		const textarea = document.querySelector('.input-textarea');
 		message.scrollTop = message.scrollHeight;
+		textarea.scrollTop = textarea.scrollHeight;
 	}, [loading]);
 
-	// Call click function
+	// Call submit function
 	const onSubmit = async (event) => {
 		event.preventDefault();
 		setLoading(true);
 		try {
-			const response = await fetch(`/chat/${prompt || 0}`, {
+			const modifiedPrompt = isNaN(prompt) ? 0 : prompt;
+			const response = await fetch(`/chat/${modifiedPrompt || 0}`, {
 				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json',
 				},
-				//body: JSON.stringify({ prompt }),
+				//body: JSON.stringify({ modifiedPrompt }),
 			});
 			const data = await response.json();
 			const myMessage = {
 				_id: 'dummyId',
-				message: prompt || 0,
+				message: modifiedPrompt || 0,
 			};
 			setTimeout(() => {
 				data && setResults((prev) => [...prev, myMessage, data]);
 				setLoading(false);
-			}, 1000);
+				setPrompt('');
+			}, 500);
+		} catch (error) {
+			setLoading(false);
+			console.log(error);
+		}
+	};
+
+	// Call click function
+	const onClick = async () => {
+		setLoading(true);
+		try {
+			const response = await fetch(
+				'https://jsonplaceholder.typicode.com/todos',
+				{
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				}
+			);
+			const data = await response.json();
+			const message = `Given this data:\n${JSON.stringify(
+				data.slice(0, 5)
+			)},\ntell me `;
+			setTimeout(() => {
+				setPrompt(message);
+				const textarea = document.querySelector('.input-textarea');
+				textarea?.focus();
+				setLoading(false);
+			}, 500);
 		} catch (error) {
 			setLoading(false);
 			console.log(error);
@@ -72,11 +105,15 @@ const App = () => {
 							name='prompt'
 							rows='3'
 							placeholder='Enter a prompt'
+							className='input-textarea'
 							value={prompt}
 							onChange={(e) => setPrompt(e.target.value)}
 						/>
 						<input type='submit' value='Ask me' disabled={loading} />
 					</form>
+					<button disabled={loading} onClick={onClick}>
+						Input data
+					</button>
 				</main>
 			</div>
 		</div>
