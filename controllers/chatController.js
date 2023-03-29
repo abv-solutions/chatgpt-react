@@ -3,10 +3,10 @@ const Chat = require('../models/Chat');
 // Get chat
 exports.getChat = async (req, res) => {
 	try {
-		const messages = await Chat.find();
-		res
-			.status(200)
-			.json(messages[req.params.index] ? messages[req.params.index] : null);
+		const message = await Chat.findOne({ prompt: req.query.prompt });
+		message
+			? res.status(200).json(message)
+			: res.status(404).json({ msg: 'No message found' });
 	} catch (err) {
 		res.status(500).json({ msg: 'Something went wrong' });
 	}
@@ -14,21 +14,11 @@ exports.getChat = async (req, res) => {
 
 // Add chat
 exports.addChat = async (req, res) => {
-	// Get fields from request body
-	const { message } = req.body;
-	// Validation for empty fields
-	if (!message) {
-		return res.status(400).json({ msg: 'Please add a message' });
-	}
-	// Create new item model
-	const newChat = new Chat({
-		message,
-	});
 	try {
 		// Save new chat to mongodb
-		const chat = await newChat.save();
+		const chat = await Chat.insertMany(req.body);
 		res.status(201).json(chat);
 	} catch (err) {
-		res.status(500).json({ msg: 'Something went wrong' });
+		res.status(500).json({ msg: err.message || 'Something went wrong' });
 	}
 };

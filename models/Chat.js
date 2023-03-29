@@ -10,6 +10,11 @@ const ChatSchema = new Schema({
 		required: [true, 'Please add a message'],
 		trim: true,
 	},
+	prompt: {
+		type: String,
+		required: [true, 'Please add a prompt'],
+		trim: true,
+	},
 });
 
 ChatSchema.plugin(timestamp);

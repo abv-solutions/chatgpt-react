@@ -1,10 +1,12 @@
 import './App.css';
 import { useState, useEffect } from 'react';
 import Spinner from './components/Spinner';
+import { MessageType, Colors } from './utils/constants';
 
 const App = () => {
 	const [prompt, setPrompt] = useState('');
-	const [results, setResults] = useState([]);
+	const [messages, setMessages] = useState([]);
+	const [pairMessages, setPairMessages] = useState([]);
 	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
@@ -17,25 +19,36 @@ const App = () => {
 	// Call submit function
 	const onSubmit = async (event) => {
 		event.preventDefault();
+		if (!prompt) return;
 		setLoading(true);
 		try {
-			const modifiedPrompt = isNaN(prompt) ? 0 : prompt;
-			const response = await fetch(`/chat/${modifiedPrompt || 0}`, {
+			const response = await fetch('/chat?' + new URLSearchParams({ prompt }), {
 				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json',
 				},
-				//body: JSON.stringify({ modifiedPrompt }),
 			});
-			const data = await response.json();
-			const myMessage = {
+			const answer = await response.json();
+			const question = {
 				_id: 'dummyId',
-				message: modifiedPrompt || 0,
+				message: prompt,
+				type: MessageType.Question,
 			};
 			setTimeout(() => {
-				data && setResults((prev) => [...prev, myMessage, data]);
 				setLoading(false);
 				setPrompt('');
+				if (response.status === 200) {
+					setMessages((prev) => [
+						...prev,
+						question,
+						{ ...answer, type: MessageType.Answer },
+					]);
+					setPairMessages((prev) => [
+						...prev,
+						{ prompt, message: answer.message },
+					]);
+					console.log(pairMessages);
+				}
 			}, 500);
 		} catch (error) {
 			setLoading(false);
@@ -43,8 +56,37 @@ const App = () => {
 		}
 	};
 
-	// Call click function
-	const onClick = async () => {
+	// Call data click function
+	const onDataClick = async () => {
+		setLoading(true);
+		try {
+			const response = await fetch(
+				'https://jsonplaceholder.typicode.com/todos',
+				{
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				}
+			);
+			const data = await response.json();
+			const message = `Given this data:\n${JSON.stringify(
+				data.slice(0, 5)
+			)},\ntell me `;
+			setTimeout(() => {
+				setPrompt(message);
+				const textarea = document.querySelector('.input-textarea');
+				textarea?.focus();
+				setLoading(false);
+			}, 500);
+		} catch (error) {
+			setLoading(false);
+			console.log(error);
+		}
+	};
+
+	// Call save click function
+	const onSaveClick = async () => {
 		setLoading(true);
 		try {
 			const response = await fetch(
@@ -79,11 +121,14 @@ const App = () => {
 				<main className='main'>
 					<div className='result'>
 						<div className='message'>
-							{results.map(({ _id, message }, idx) => (
+							{messages.map(({ _id, message, type }) => (
 								<p
 									key={Math.random().toString(36).substring(2, 5)}
 									style={{
-										backgroundColor: idx % 2 === 0 ? '#343949' : '#1c1f26',
+										backgroundColor:
+											type === MessageType.Question
+												? Colors.Question
+												: Colors.Answer,
 									}}
 								>
 									{message}
@@ -92,7 +137,7 @@ const App = () => {
 							{loading && (
 								<div
 									style={{
-										backgroundColor: '#343949',
+										backgroundColor: Colors.Question,
 									}}
 								>
 									<Spinner />
@@ -109,11 +154,24 @@ const App = () => {
 							value={prompt}
 							onChange={(e) => setPrompt(e.target.value)}
 						/>
-						<input type='submit' value='Ask me' disabled={loading} />
+						<input type='submit' value='Ask me' disabled={loading || !prompt} />
 					</form>
-					<button disabled={loading} onClick={onClick}>
-						Input data
-					</button>
+					<div className='button-wrapper'>
+						<button
+							className='data-button'
+							disabled={loading}
+							onClick={onDataClick}
+						>
+							Input data
+						</button>
+						<button
+							className='save-button'
+							disabled={loading}
+							onClick={onSaveClick}
+						>
+							Save
+						</button>
+					</div>
 				</main>
 			</div>
 		</div>

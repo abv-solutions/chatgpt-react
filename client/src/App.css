@@ -14,7 +14,7 @@
 }
 h1 {
 	padding: 0 1rem;
-	margin-top: -2rem;
+	margin-top: -4rem;
 }
 .main input {
 	font-family: 'ColfaxAI', Helvetica, sans-serif;
@@ -24,8 +24,7 @@ h1 {
 	flex-direction: column;
 	align-items: center;
 }
-.main form,
-button {
+.main form {
 	display: flex;
 	flex-direction: column;
 	width: 70vw;
@@ -59,8 +58,12 @@ button {
 }
 .main button {
 	background-color: #359a3c;
-	margin-top: 1rem;
 	align-items: center;
+	width: 50%;
+	padding: 0.7rem 0.2rem;
+}
+.main button.save-button {
+	background-color: #9a8735;
 }
 .main input[type='submit']:hover {
 	background-color: #086b52;
@@ -68,10 +71,21 @@ button {
 .main button:hover:not(:disabled) {
 	background-color: #0e7d15;
 }
+.main button.save-button:hover:not(:disabled) {
+	background-color: #726112;
+}
 .main input[type='submit']:disabled,
-button:disabled {
+button:disabled,
+button.save-button:disabled {
 	background-color: #6b6b6b;
 	cursor: not-allowed;
+}
+.main .button-wrapper {
+	margin-top: 1rem;
+	display: flex;
+	width: 70vw;
+	gap: 1rem;
+	flex-direction: row;
 }
 .main .result {
 	width: 80vw;
