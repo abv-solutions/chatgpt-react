@@ -86,27 +86,20 @@ const App = () => {
 	};
 
 	// Call save click function
-	const onSaveClick = async () => {
+	const onSaveClick = () => {
+		if (!pairMessages || pairMessages.length == 0) return;
 		setLoading(true);
 		try {
-			const response = await fetch(
-				'https://jsonplaceholder.typicode.com/todos',
-				{
-					method: 'GET',
+			setTimeout(async () => {
+				const response = await fetch('/chat', {
+					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',
 					},
-				}
-			);
-			const data = await response.json();
-			const message = `Given this data:\n${JSON.stringify(
-				data.slice(0, 5)
-			)},\ntell me `;
-			setTimeout(() => {
-				setPrompt(message);
-				const textarea = document.querySelector('.input-textarea');
-				textarea?.focus();
+					body: JSON.stringify(pairMessages),
+				});
 				setLoading(false);
+				if (response.status === 201) setPairMessages([]);
 			}, 500);
 		} catch (error) {
 			setLoading(false);
@@ -166,7 +159,7 @@ const App = () => {
 						</button>
 						<button
 							className='save-button'
-							disabled={loading}
+							disabled={loading || !pairMessages || pairMessages.length == 0}
 							onClick={onSaveClick}
 						>
 							Save
