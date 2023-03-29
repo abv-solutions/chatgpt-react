@@ -1,18 +1,21 @@
 import './App.css';
 import { useState, useEffect } from 'react';
+import Spinner from './components/Spinner';
 
 const App = () => {
 	const [prompt, setPrompt] = useState('');
 	const [results, setResults] = useState([]);
+	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
 		const message = document.querySelector('.message');
-		message.scrollTop = message?.scrollHeight;
-	}, [results]);
+		message.scrollTop = message.scrollHeight;
+	}, [loading]);
 
 	// Call click function
 	const onSubmit = async (event) => {
 		event.preventDefault();
+		setLoading(true);
 		try {
 			const response = await fetch(`/chat/${prompt || 0}`, {
 				method: 'GET',
@@ -26,8 +29,12 @@ const App = () => {
 				_id: 'dummyId',
 				message: prompt || 0,
 			};
-			data && setResults((prev) => [...prev, myMessage, data]);
+			setTimeout(() => {
+				data && setResults((prev) => [...prev, myMessage, data]);
+				setLoading(false);
+			}, 1000);
 		} catch (error) {
+			setLoading(false);
 			console.log(error);
 		}
 	};
@@ -49,6 +56,15 @@ const App = () => {
 									{message}
 								</p>
 							))}
+							{loading && (
+								<div
+									style={{
+										backgroundColor: '#343949',
+									}}
+								>
+									<Spinner />
+								</div>
+							)}
 						</div>
 					</div>
 					<form onSubmit={onSubmit}>
@@ -59,7 +75,7 @@ const App = () => {
 							value={prompt}
 							onChange={(e) => setPrompt(e.target.value)}
 						/>
-						<input type='submit' value='Ask me' />
+						<input type='submit' value='Ask me' disabled={loading} />
 					</form>
 				</main>
 			</div>

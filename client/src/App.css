@@ -54,6 +54,10 @@ h1 {
 .main input[type='submit']:hover {
 	background-color: #086b52;
 }
+.main input[type='submit']:disabled {
+	background-color: #6b6b6b;
+	cursor: not-allowed;
+}
 .main .result {
 	width: 80vw;
 	max-height: 35vh;
@@ -63,6 +67,7 @@ h1 {
 	max-height: 35vh;
 	margin-left: 20px;
 	overflow-y: auto;
+	scroll-behavior: smooth;
 	text-align: left;
 	white-space: pre-line;
 }
