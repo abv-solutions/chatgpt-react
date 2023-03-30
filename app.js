@@ -14,6 +14,7 @@ connectDB();
 
 // Set the routes
 app.use('/chat', require('./routes/chat'));
+app.use('/todo', require('./routes/todo'));
 
 // Serve static assets if in production
 if (config.ENV === 'production') {
