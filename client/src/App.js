@@ -4,10 +4,10 @@ import Spinner from './components/Spinner';
 import { MessageType, Colors } from './utils/constants';
 
 const App = () => {
+	const [loading, setLoading] = useState(false);
 	const [prompt, setPrompt] = useState('');
 	const [messages, setMessages] = useState([]);
 	const [pairMessages, setPairMessages] = useState([]);
-	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
 		const message = document.querySelector('.message');
@@ -47,7 +47,6 @@ const App = () => {
 						...prev,
 						{ prompt, message: answer.message },
 					]);
-					console.log(pairMessages);
 				}
 			}, 500);
 		} catch (error) {
@@ -74,10 +73,9 @@ const App = () => {
 				data.slice(0, 5)
 			)},\ntell me `;
 			setTimeout(() => {
-				setPrompt(message);
-				const textarea = document.querySelector('.input-textarea');
-				textarea?.focus();
 				setLoading(false);
+				setPrompt(message);
+				document.querySelector('.input-textarea')?.focus();
 			}, 500);
 		} catch (error) {
 			setLoading(false);
@@ -86,20 +84,20 @@ const App = () => {
 	};
 
 	// Call save click function
-	const onSaveClick = () => {
-		if (!pairMessages || pairMessages.length == 0) return;
+	const onSaveClick = async () => {
+		if (!pairMessages || pairMessages.length === 0) return;
 		setLoading(true);
 		try {
-			setTimeout(async () => {
-				const response = await fetch('/chat', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify(pairMessages),
-				});
+			const response = await fetch('/chat', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(pairMessages),
+			});
+			setTimeout(() => {
 				setLoading(false);
-				if (response.status === 201) setPairMessages([]);
+				response.status === 201 && setPairMessages([]);
 			}, 500);
 		} catch (error) {
 			setLoading(false);
@@ -159,7 +157,7 @@ const App = () => {
 						</button>
 						<button
 							className='save-button'
-							disabled={loading || !pairMessages || pairMessages.length == 0}
+							disabled={loading || !pairMessages || pairMessages.length === 0}
 							onClick={onSaveClick}
 						>
 							Save
