@@ -59,7 +59,7 @@ const App = () => {
 	const onDataClick = async () => {
 		setLoading(true);
 		try {
-			const query = { completed: true, userId: 7, limit: 10 };
+			const query = { completed: false, userId: 7, limit: 5 };
 			const response = await fetch('/todo?' + new URLSearchParams(query), {
 				method: 'GET',
 				headers: {
