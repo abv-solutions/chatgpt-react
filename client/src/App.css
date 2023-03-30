@@ -94,8 +94,7 @@ button.save-button:disabled {
 .main .result .message {
 	font-size: calc(0.7rem + 1vmin);
 	max-height: 35vh;
-	scrollbar-gutter: stable both-edges;
-	overflow-y: auto;
+	overflow-y: overlay;
 	scroll-behavior: smooth;
 	text-align: left;
 	white-space: pre-line;
