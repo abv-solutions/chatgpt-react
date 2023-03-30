@@ -59,15 +59,13 @@ const App = () => {
 	const onDataClick = async () => {
 		setLoading(true);
 		try {
-			const response = await fetch(
-				'https://jsonplaceholder.typicode.com/todos',
-				{
-					method: 'GET',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-				}
-			);
+			const query = { completed: true, userId: 7, limit: 10 };
+			const response = await fetch('/todo?' + new URLSearchParams(query), {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			});
 			const data = await response.json();
 			const message = `Given this data:\n${JSON.stringify(
 				data.slice(0, 5)
