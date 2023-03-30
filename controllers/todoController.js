@@ -5,22 +5,20 @@ exports.getTodo = async (req, res) => {
 	try {
 		// Create query
 		let query = {};
+		const regex = new RegExp(req.query.title, 'i');
 		req.query.completed && (query.completed = req.query.completed);
-		req.query.userId && (query.userId = req.query.userId);
+		req.query.userId && (query.userId = JSON.parse(req.query.userId));
+		req.query.title && (query.title = { $regex: regex });
+		console.log(query);
 		// Execute query
 		const messages = await Todo.find(query)
 			.limit(req.query.limit || 50)
-			.select({
-				_id: 0,
-				userId: 1,
-				title: 1,
-				completed: 1,
-			});
-		messages
+			.select({ _id: 0, __v: 0, id: 0 });
+		messages.length > 0
 			? res.status(200).json(messages)
 			: res.status(404).json({ msg: 'No todos found' });
 	} catch (err) {
-		res.status(500).json({ msg: 'Something went wrong' });
+		res.status(500).json({ msg: err.message || 'Something went wrong' });
 	}
 };
 

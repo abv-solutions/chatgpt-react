@@ -59,7 +59,15 @@ const App = () => {
 	const onDataClick = async () => {
 		setLoading(true);
 		try {
-			const query = { completed: false, userId: 7, limit: 5 };
+			const query = {
+				completed: false,
+				limit: 20,
+				title: 'est',
+				userId: JSON.stringify({
+					$gte: 2,
+					$lte: 3,
+				}),
+			};
 			const response = await fetch('/todo?' + new URLSearchParams(query), {
 				method: 'GET',
 				headers: {
@@ -67,13 +75,15 @@ const App = () => {
 				},
 			});
 			const data = await response.json();
-			const message = `Given this data:\n${JSON.stringify(
-				data.slice(0, 5)
-			)},\ntell me `;
 			setTimeout(() => {
 				setLoading(false);
-				setPrompt(message);
-				document.querySelector('.input-textarea')?.focus();
+				if (response.status === 200) {
+					const message = `Given this data:\n${JSON.stringify(
+						data.slice(0, 5)
+					)},\ntell me `;
+					setPrompt(message);
+					document.querySelector('.input-textarea')?.focus();
+				}
 			}, 500);
 		} catch (error) {
 			setLoading(false);
