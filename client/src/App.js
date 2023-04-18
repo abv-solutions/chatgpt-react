@@ -22,33 +22,34 @@ const App = () => {
 		if (!prompt) return;
 		setLoading(true);
 		try {
-			const response = await fetch('/chat?' + new URLSearchParams({ prompt }), {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			});
+			const response = await fetch(
+				'/chat/ask?' + new URLSearchParams({ prompt }),
+				{
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				}
+			);
 			const answer = await response.json();
 			const question = {
 				_id: 'dummyId',
-				message: prompt,
+				content: prompt,
 				type: MessageType.Question,
 			};
-			setTimeout(() => {
-				setLoading(false);
-				setPrompt('');
-				if (response.status === 200) {
-					setMessages((prev) => [
-						...prev,
-						question,
-						{ ...answer, type: MessageType.Answer },
-					]);
-					setPairMessages((prev) => [
-						...prev,
-						{ prompt, message: answer.message },
-					]);
-				}
-			}, 500);
+			setLoading(false);
+			setPrompt('');
+			if (response.status === 200) {
+				setMessages((prev) => [
+					...prev,
+					question,
+					{ ...answer, type: MessageType.Answer },
+				]);
+				setPairMessages((prev) => [
+					...prev,
+					{ prompt, content: answer.content },
+				]);
+			}
 		} catch (error) {
 			setLoading(false);
 			console.log(error);
@@ -60,12 +61,12 @@ const App = () => {
 		setLoading(true);
 		try {
 			const query = {
-				completed: false,
-				limit: 20,
+				// completed: false,
+				limit: 10,
 				title: 'est',
 				userId: JSON.stringify({
 					$gte: 2,
-					$lte: 3,
+					$lte: 8,
 				}),
 			};
 			const response = await fetch('/todo?' + new URLSearchParams(query), {
@@ -75,16 +76,14 @@ const App = () => {
 				},
 			});
 			const data = await response.json();
-			setTimeout(() => {
-				setLoading(false);
-				if (response.status === 200) {
-					const message = `Given this data:\n${JSON.stringify(
-						data.slice(0, 5)
-					)},\ntell me `;
-					setPrompt(message);
-					document.querySelector('.input-textarea')?.focus();
-				}
-			}, 500);
+			setLoading(false);
+			if (response.status === 200) {
+				const message = `Given this data:\n${JSON.stringify(
+					data.slice(0, 5)
+				)},\ntell me `;
+				setPrompt(message);
+				document.querySelector('.input-textarea')?.focus();
+			}
 		} catch (error) {
 			setLoading(false);
 			console.log(error);
@@ -103,10 +102,8 @@ const App = () => {
 				},
 				body: JSON.stringify(pairMessages),
 			});
-			setTimeout(() => {
-				setLoading(false);
-				response.status === 201 && setPairMessages([]);
-			}, 500);
+			setLoading(false);
+			response.status === 201 && setPairMessages([]);
 		} catch (error) {
 			setLoading(false);
 			console.log(error);
@@ -120,7 +117,7 @@ const App = () => {
 				<main className='main'>
 					<div className='result'>
 						<div className='message'>
-							{messages.map(({ _id, message, type }) => (
+							{messages.map(({ _id, content, type }) => (
 								<p
 									key={Math.random().toString(36).substring(2, 5)}
 									style={{
@@ -130,7 +127,7 @@ const App = () => {
 												: Colors.Answer,
 									}}
 								>
-									{message}
+									{content}
 								</p>
 							))}
 							{loading && (

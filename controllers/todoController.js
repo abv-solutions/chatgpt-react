@@ -9,7 +9,6 @@ exports.getTodo = async (req, res) => {
 		req.query.completed && (query.completed = req.query.completed);
 		req.query.userId && (query.userId = JSON.parse(req.query.userId));
 		req.query.title && (query.title = { $regex: regex });
-		console.log(query);
 		// Execute query
 		const messages = await Todo.find(query)
 			.limit(req.query.limit || 50)

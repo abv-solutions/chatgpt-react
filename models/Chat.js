@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 
 // Create chat schema
 const ChatSchema = new Schema({
-	message: {
+	content: {
 		type: String,
 		required: [true, 'Please add a message'],
 		trim: true,
