@@ -25,7 +25,7 @@ exports.askChatGPT = async (req, res) => {
 
 		const completion = await openai.createChatCompletion({
 			model: 'gpt-3.5-turbo',
-			max_tokens: 64,
+			max_tokens: 1024,
 			messages: [{ role: 'user', content: req.query.prompt }],
 		});
 
